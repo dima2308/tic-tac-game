@@ -15,7 +15,7 @@ class TicTac:
         for i in range(TicTac.WIDTH):
             t = []
             for j in range(TicTac.WIDTH):
-                btn = MyButton(TicTac._window, x=i, y=j)
+                btn = MyButton(TicTac._window)
                 btn.config(command=lambda button=btn: self.click(button))
                 t.append(btn)
             self.buttons.append(t)
@@ -38,8 +38,8 @@ class TicTac:
                 TicTac.first = False
             else:
                 self.print_symbol(clicked_btn, 'o', 'red')
-                clicked_btn.symbol = 'y'
-                self.check_winner('y')
+                clicked_btn.symbol = 'o'
+                self.check_winner('o')
                 TicTac.first = True
             TicTac.counter += 1
 
@@ -92,11 +92,9 @@ class TicTac:
 
 class MyButton(tk.Button):
 
-    def __init__(self, master, x, y, *args, **kwargs):
+    def __init__(self, master, *args, **kwargs):
         super(MyButton, self).__init__(master, width=5,
                                        height=2, font='Calibri 25 bold', *args, **kwargs)
-        self.x = x
-        self.y = y
         self.active = True
         self.symbol = None
 
