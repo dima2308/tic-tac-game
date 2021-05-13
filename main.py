@@ -7,7 +7,7 @@ class TicTac:
 
     _window = tk.Tk()
     WIDTH = 3
-    first = True
+    first = None
     counter = 0
     winner = False
     type_game = None
@@ -23,6 +23,10 @@ class TicTac:
             self.buttons.append(t)
 
     def _create_field(self):
+        self.sm = 'x' if TicTac.first else 'o'
+        self.b = tk.Label(text=self.sm, fg="black", font='Arial 14')
+        self.b.grid(row=3, column=1)
+
         for i in range(TicTac.WIDTH):
             for j in range(TicTac.WIDTH):
                 btn = self.buttons[i][j]
@@ -47,14 +51,19 @@ class TicTac:
         self.check_winner(sm)
         TicTac.first = player_flag
 
+    def set_symbol(self):
+        self.sm = 'x' if self.sm == 'o' else 'o'
+
     def click(self, clicked_btn):
         if TicTac.type_game == 'no':
             """ Игра друг с другом """
             if clicked_btn.active:
                 if TicTac.first:
                     self.move(clicked_btn, 'x', 'blue', False)
+                    self.b.config(text='o')
                 else:
                     self.move(clicked_btn, 'o', 'red', True)
+                    self.b.config(text='x')
                 TicTac.counter += 1
 
             self.set_active_state(clicked_btn)
@@ -62,7 +71,8 @@ class TicTac:
         else:
             """ Игра с компьютером """
             if clicked_btn.active:
-                self.move(clicked_btn, 'x', 'blue', True)
+                self.move(clicked_btn, self.sm, 'blue', True)
+                self.set_symbol()
 
             self.set_active_state(clicked_btn)
 
@@ -70,8 +80,9 @@ class TicTac:
                 line = random.choice(self.buttons)
                 btn = random.choice(line)
                 empty_btn = self.get_empty_btn(line, btn)
-                self.move(empty_btn, 'o', 'red', False)
+                self.move(empty_btn, self.sm, 'red', False)
                 self.set_active_state(empty_btn)
+                self.set_symbol()
 
             TicTac.counter += 2
 
@@ -82,10 +93,6 @@ class TicTac:
             btn3.config(background='orange')
             TicTac.winner = True
             self.disable_buttons()
-
-    @staticmethod
-    def show_message(text):
-        messagebox.showinfo(title='Игра окончена', message=text)
 
     def check_winner(self, sm):
         for n in range(3):
@@ -113,12 +120,18 @@ class TicTac:
                 self.buttons[i][j].config(state='disabled')
 
     def start(self):
+        TicTac.type_game = messagebox.askquestion(
+            "Выбор противника", "Игра с компьютером?")
+        TicTac.first = messagebox.askyesno(
+            "Выбор символа", "Крестики начинают?")
         self._create_field()
         TicTac._window.title('Крестики-нолики')
         TicTac._window.resizable(0, 0)
-        TicTac.type_game = messagebox.askquestion(
-            "Выбор противника", "Игра с компьютером?")
         TicTac._window.mainloop()
+
+    @staticmethod
+    def show_message(text):
+        messagebox.showinfo(title='Игра окончена', message=text)
 
 
 class MyButton(tk.Button):
