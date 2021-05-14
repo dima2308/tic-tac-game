@@ -137,11 +137,11 @@ class TicTac:
 
     @staticmethod
     def show_message(text):
-        messagebox.showinfo(title='Игра окончена', message=text)
+        messagebox.showinfo('Игра окончена', text)
 
     @staticmethod
     def choose_option():
-        return messagebox.askyesno("Выбор действия", "Заново?")
+        return messagebox.askyesno('Выбор действия', 'Заново?')
 
     @staticmethod
     def restart():
