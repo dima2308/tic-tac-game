@@ -1,3 +1,5 @@
+import os
+import sys
 import random
 import tkinter as tk
 from tkinter import messagebox
@@ -110,9 +112,13 @@ class TicTac:
                 self.show_message('Крестики победили!')
             else:
                 self.show_message('Нолики победили!')
+            if TicTac.choose_option():
+                TicTac.restart()
 
         if TicTac.counter == 8 and not TicTac.winner:
             self.show_message('Ничья!')
+            if TicTac.choose_option():
+                TicTac.restart()
 
     def disable_buttons(self):
         for i in range(TicTac.WIDTH):
@@ -132,6 +138,15 @@ class TicTac:
     @staticmethod
     def show_message(text):
         messagebox.showinfo(title='Игра окончена', message=text)
+
+    @staticmethod
+    def choose_option():
+        return messagebox.askyesno("Выбор действия", "Заново?")
+
+    @staticmethod
+    def restart():
+        python = sys.executable
+        os.execl(python, python, * sys.argv)
 
 
 class MyButton(tk.Button):
